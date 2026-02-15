@@ -8,6 +8,13 @@
       "when": 1771174864752,
       "tag": "0000_happy_black_bird",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771179851525,
+      "tag": "0001_safe_wilson_fisk",
+      "breakpoints": true
     }
   ]
 }

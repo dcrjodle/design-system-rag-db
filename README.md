@@ -16,13 +16,63 @@ Store components across the atomic design hierarchy (tokens, atoms, molecules, o
 
 ```bash
 cp .env.example .env
-# Fill in DATABASE_URL and OPENAI_API_KEY (or configure Ollama)
+# configure your embedding provider (see below)
 
 docker compose up -d
 npm install
 npm run db:migrate
 npm run seed        # optional: loads example design system
-npm run dev         # starts MCP server (stdio)
+npm run build
+```
+
+## Embedding providers
+
+Semantic search requires an embedding model to convert text into vectors. Pick one:
+
+### Option A: Ollama (free, local)
+
+1. Install Ollama:
+
+```bash
+brew install ollama
+```
+
+2. Start the server and pull the model:
+
+```bash
+ollama serve
+ollama pull nomic-embed-text
+```
+
+3. Set your `.env`:
+
+```
+EMBEDDING_PROVIDER=ollama
+EMBEDDING_DIMENSIONS=768
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=nomic-embed-text
+```
+
+### Option B: OpenAI (hosted, requires API key)
+
+1. Get an API key from [platform.openai.com](https://platform.openai.com)
+
+2. Set your `.env`:
+
+```
+EMBEDDING_PROVIDER=openai
+EMBEDDING_DIMENSIONS=1536
+OPENAI_API_KEY=sk-...
+```
+
+### Dimension matching
+
+`EMBEDDING_DIMENSIONS` must match the output size of your chosen model. The database vector columns are sized from this variable. If you switch providers, regenerate and re-run migrations:
+
+```bash
+npm run db:generate
+npm run db:migrate
+npm run seed
 ```
 
 ## Scripts
@@ -97,6 +147,29 @@ component_change_log       — history of every code/metadata update
 
 Add to your `.cursor/mcp.json`:
 
+**With Ollama:**
+
+```json
+{
+  "mcpServers": {
+    "design-system-rag-db": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/path/to/design-system-rag-db",
+      "env": {
+        "DATABASE_URL": "postgres://postgres:postgres@localhost:5432/design_system",
+        "EMBEDDING_PROVIDER": "ollama",
+        "EMBEDDING_DIMENSIONS": "768",
+        "OLLAMA_HOST": "http://localhost:11434",
+        "OLLAMA_MODEL": "nomic-embed-text"
+      }
+    }
+  }
+}
+```
+
+**With OpenAI:**
+
 ```json
 {
   "mcpServers": {
@@ -107,6 +180,7 @@ Add to your `.cursor/mcp.json`:
       "env": {
         "DATABASE_URL": "postgres://postgres:postgres@localhost:5432/design_system",
         "EMBEDDING_PROVIDER": "openai",
+        "EMBEDDING_DIMENSIONS": "1536",
         "OPENAI_API_KEY": "sk-..."
       }
     }

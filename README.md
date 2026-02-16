@@ -1,5 +1,7 @@
 # Design System RAG DB
 
+[![npm version](https://img.shields.io/npm/v/design-system-rag-db.svg)](https://www.npmjs.com/package/design-system-rag-db)
+
 A Postgres + pgvector database for storing, querying, and syncing design system components — exposed via an MCP server for agents and web apps.
 
 Store components across the atomic design hierarchy (tokens, atoms, molecules, organisms), track how they reference each other, and query by meaning using vector similarity search.

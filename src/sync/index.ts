@@ -21,6 +21,7 @@ interface SyncInput {
   requirements?: string;
   examples?: string;
   version?: string;
+  imports?: string;
 }
 
 function embeddingText(c: { name: string; tier: string; usageRules?: string | null; requirements?: string | null }) {
@@ -46,6 +47,7 @@ export async function syncComponent(input: SyncInput) {
     if (input.usageRules !== undefined && old.usageRules !== input.usageRules) changed.push("usage_rules");
     if (input.requirements !== undefined && old.requirements !== input.requirements) changed.push("requirements");
     if (input.examples !== undefined && old.examples !== input.examples) changed.push("examples");
+    if (input.imports !== undefined && old.imports !== input.imports) changed.push("imports");
     if (input.propsSchema !== undefined) changed.push("props_schema");
 
     if (changed.length > 0) {
@@ -68,6 +70,7 @@ export async function syncComponent(input: SyncInput) {
         usageRules: input.usageRules ?? old.usageRules,
         requirements: input.requirements ?? old.requirements,
         examples: input.examples ?? old.examples,
+        imports: input.imports ?? old.imports,
         version: input.version ?? old.version,
         embedding,
         updatedAt: new Date(),
@@ -87,6 +90,7 @@ export async function syncComponent(input: SyncInput) {
         usageRules: input.usageRules,
         requirements: input.requirements,
         examples: input.examples,
+        imports: input.imports,
         version: input.version,
         embedding,
       })

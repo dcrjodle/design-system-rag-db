@@ -23,6 +23,7 @@ const componentInput = {
   usageRules: z.string().optional(),
   requirements: z.string().optional(),
   examples: z.string().optional(),
+  imports: z.string().optional(),
   version: z.string().optional(),
 };
 

@@ -33,13 +33,12 @@ async function seed() {
   const button = await syncComponent({
     name: "Button",
     tier: "atom",
-    code: `import { forwardRef } from "react";
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = "primary", size = "md", children, ...props }, ref) => (
-  <button ref={ref} className={\`btn btn--\${variant} btn--\${size}\`} {...props}>
+    imports: `import { forwardRef } from "react";`,
+    code: `const Button = ({ variant = "primary", size = "md", children, ...props }) => (
+  <button className={\`btn btn--\${variant} btn--\${size}\`} {...props}>
     {children}
   </button>
-));`,
+);`,
     source: "manual",
     usageRules: "Use Button for all clickable actions. Primary variant for main CTAs, secondary for less prominent actions. Always provide accessible labels.",
     requirements: "Must support disabled state, loading state, and keyboard navigation. Renders as <button> by default.",
@@ -49,9 +48,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = "p
   const icon = await syncComponent({
     name: "Icon",
     tier: "atom",
-    code: `import { LucideIcon } from "lucide-react";
-
-export const Icon = ({ icon: IconComponent, size = 20, ...props }: IconProps) => (
+    imports: `import { LucideIcon } from "lucide-react";`,
+    code: `const Icon = ({ icon: IconComponent, size = 20, ...props }) => (
   <IconComponent size={size} {...props} />
 );`,
     source: "manual",
@@ -62,7 +60,7 @@ export const Icon = ({ icon: IconComponent, size = 20, ...props }: IconProps) =>
   const text = await syncComponent({
     name: "Text",
     tier: "atom",
-    code: `export const Text = ({ as: Tag = "p", size = "base", children, ...props }: TextProps) => (
+    code: `const Text = ({ as: Tag = "p", size = "base", children, ...props }) => (
   <Tag className={\`text text--\${size}\`} {...props}>{children}</Tag>
 );`,
     source: "manual",
@@ -73,15 +71,14 @@ export const Icon = ({ icon: IconComponent, size = 20, ...props }: IconProps) =>
   const input = await syncComponent({
     name: "Input",
     tier: "atom",
-    code: `import { forwardRef } from "react";
-
-export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, ...props }, ref) => (
+    imports: `import { forwardRef } from "react";`,
+    code: `const Input = ({ label, error, ...props }) => (
   <div className="input-wrapper">
     {label && <label className="input-label">{label}</label>}
-    <input ref={ref} className={\`input \${error ? "input--error" : ""}\`} {...props} />
+    <input className={\`input \${error ? "input--error" : ""}\`} {...props} />
     {error && <span className="input-error">{error}</span>}
   </div>
-));`,
+);`,
     source: "manual",
     usageRules: "Use Input for all single-line text inputs. Always provide a label for accessibility. Show error messages inline.",
     requirements: "Must support ref forwarding. Must show validation errors. Must be accessible with proper label association.",
@@ -91,12 +88,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, .
   const searchBar = await syncComponent({
     name: "SearchBar",
     tier: "molecule",
-    code: `import { Input } from "./Input";
-import { Button } from "./Button";
-import { Icon } from "./Icon";
-import { Search } from "lucide-react";
-
-export const SearchBar = ({ onSearch, ...props }: SearchBarProps) => (
+    imports: `import { Input } from "./Input";\nimport { Button } from "./Button";\nimport { Icon } from "./Icon";\nimport { Search } from "lucide-react";`,
+    code: `const SearchBar = ({ onSearch, ...props }) => (
   <form className="search-bar" onSubmit={(e) => { e.preventDefault(); onSearch(e.currentTarget.query.value); }}>
     <Input name="query" placeholder="Search..." {...props} />
     <Button type="submit" variant="primary">
@@ -112,9 +105,8 @@ export const SearchBar = ({ onSearch, ...props }: SearchBarProps) => (
   const card = await syncComponent({
     name: "Card",
     tier: "molecule",
-    code: `import { Text } from "./Text";
-
-export const Card = ({ title, children, ...props }: CardProps) => (
+    imports: `import { Text } from "./Text";`,
+    code: `const Card = ({ title, children, ...props }) => (
   <div className="card" {...props}>
     {title && <Text as="h3" size="lg" className="card-title">{title}</Text>}
     <div className="card-body">{children}</div>
@@ -128,10 +120,8 @@ export const Card = ({ title, children, ...props }: CardProps) => (
   const formField = await syncComponent({
     name: "FormField",
     tier: "molecule",
-    code: `import { Input } from "./Input";
-import { Text } from "./Text";
-
-export const FormField = ({ label, hint, error, ...inputProps }: FormFieldProps) => (
+    imports: `import { Input } from "./Input";\nimport { Text } from "./Text";`,
+    code: `const FormField = ({ label, hint, error, ...inputProps }) => (
   <div className="form-field">
     <Input label={label} error={error} {...inputProps} />
     {hint && <Text size="sm" className="form-field-hint">{hint}</Text>}
@@ -146,13 +136,8 @@ export const FormField = ({ label, hint, error, ...inputProps }: FormFieldProps)
   await syncComponent({
     name: "Header",
     tier: "organism",
-    code: `import { Button } from "./Button";
-import { Icon } from "./Icon";
-import { Text } from "./Text";
-import { SearchBar } from "./SearchBar";
-import { Menu } from "lucide-react";
-
-export const Header = ({ title, onMenuClick, onSearch }: HeaderProps) => (
+    imports: `import { Button } from "./Button";\nimport { Icon } from "./Icon";\nimport { Text } from "./Text";\nimport { SearchBar } from "./SearchBar";\nimport { Menu } from "lucide-react";`,
+    code: `const Header = ({ title, onMenuClick, onSearch }) => (
   <header className="header">
     <Button variant="ghost" onClick={onMenuClick}>
       <Icon icon={Menu} />
@@ -169,12 +154,8 @@ export const Header = ({ title, onMenuClick, onSearch }: HeaderProps) => (
   await syncComponent({
     name: "LoginForm",
     tier: "organism",
-    code: `import { FormField } from "./FormField";
-import { Button } from "./Button";
-import { Text } from "./Text";
-import { Card } from "./Card";
-
-export const LoginForm = ({ onSubmit }: LoginFormProps) => (
+    imports: `import { FormField } from "./FormField";\nimport { Button } from "./Button";\nimport { Text } from "./Text";\nimport { Card } from "./Card";`,
+    code: `const LoginForm = ({ onSubmit }) => (
   <Card title="Sign In">
     <form onSubmit={onSubmit} className="login-form">
       <FormField label="Email" type="email" name="email" required />

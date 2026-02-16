@@ -42,6 +42,7 @@ export const components = pgTable(
     name: text("name").notNull().unique(),
     tier: tierEnum("tier").notNull(),
     code: text("code").notNull(),
+    imports: text("imports"),
     propsSchema: jsonb("props_schema"),
     usageRules: text("usage_rules"),
     requirements: text("requirements"),

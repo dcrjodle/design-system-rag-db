@@ -2,9 +2,25 @@
   "name": "design-system-rag-db",
   "version": "1.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "design-system-rag-db": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "drizzle",
+    "docker-compose.yml"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts",
+    "dev": "tsx src/cli.ts",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:generate": "drizzle-kit generate",
     "seed": "tsx src/seed.ts",
